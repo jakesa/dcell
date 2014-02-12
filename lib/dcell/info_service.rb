@@ -13,9 +13,14 @@ module DCell
       @cpu_arch = RbConfig::CONFIG['host_cpu']
       @os       = RbConfig::CONFIG['host_os'][/^[A-Za-z]+/]
 
-      uname = `uname -a`.match(/\w+ (\w[\w+\.\-]*) ([\w+\.\-]+)/)
-      @hostname, @os_version = uname[1], uname[2]
-
+      if @os == 'mingw'
+        @hostname = `hostname`
+        @os_version = `ver`
+      else
+        uname = `uname -a`.match(/\w+ (\w[\w+\.\-]*) ([\w+\.\-]+)/)
+        @hostname, @os_version = uname[1], uname[2]
+      end
+      
       @platform     = RUBY_PLATFORM
       @ruby_version = RUBY_VERSION
       @ruby_engine  = RUBY_ENGINE
